@@ -1,0 +1,15 @@
+{
+  "name": "tubconcept/dolibarr-api-client",
+  "description": "PHP client for Dolibarr REST API",
+  "type": "library",
+  "require": {
+    "php": ">=7.4",
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tubconcept\\DolibarrApiClient\\": "src/"
+    }
+  },
+  "license": "MIT"
+}
