@@ -86,4 +86,23 @@ class DolibarrApiClient
         ]);
         return json_decode($response->getBody()->getContents(), true);
     }
+
+    public function put(string $endpoint, array $data = []): array
+    {
+        if (!$this->token) $this->login();
+        $response = $this->client->put($endpoint, [
+            'query' => ['DOLAPIKEY' => $this->token],
+            'json' => $data
+        ]);
+        return json_decode($response->getBody()->getContents(), true);
+    }
+    // DELETE générique
+    public function delete(string $endpoint): array
+    {
+        if (!$this->token) $this->login();
+        $response = $this->client->delete($endpoint, [
+            'query' => ['DOLAPIKEY' => $this->token]
+        ]);
+        return json_decode($response->getBody()->getContents(), true);
+    }
 }
