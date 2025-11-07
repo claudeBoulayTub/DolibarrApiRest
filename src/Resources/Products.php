@@ -872,7 +872,7 @@ class Products
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’
      * ID est invalide.
      */
-    public function getAttributes(int $id_product,string $sortfield="t.ref",string $sortorder="ASC",int $limit=100,int|null $page,string $sqlfilters='',string $properties=''): array
+    public function getAttributes(int $id_product,string $sortfield="t.ref",string $sortorder="ASC",int $limit=100,int|null $page=null,string $sqlfilters='',string $properties=''): array
     {
         $params = [
             'sortfield' => $sortfield,
