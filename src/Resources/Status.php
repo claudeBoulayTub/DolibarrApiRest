@@ -24,7 +24,7 @@ class Status
      * }
      * Response code: 200
      */
-    public function get(): array
+    public function get(): array|int|string
     {
         return $this->client->get('status');
     }

@@ -67,7 +67,7 @@ class DolibarrApiClient
     }
 
     // GET générique
-    public function get(string $endpoint, array $params = []): array
+    public function get(string $endpoint, array $params = []): array|int|string
     {
         if (!$this->token) $this->login();
         $params['DOLAPIKEY'] = $this->token;
@@ -77,7 +77,7 @@ class DolibarrApiClient
     }
 
     // POST générique
-    public function post(string $endpoint, array $data = []): array
+    public function post(string $endpoint, array $data = []): array|int|string
     {
         if (!$this->token) $this->login();
         $response = $this->client->post($endpoint, [
@@ -87,7 +87,7 @@ class DolibarrApiClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function put(string $endpoint, array $data = []): array
+    public function put(string $endpoint, array $data = []): array|int|string
     {
         if (!$this->token) $this->login();
         $response = $this->client->put($endpoint, [
@@ -97,7 +97,7 @@ class DolibarrApiClient
         return json_decode($response->getBody()->getContents(), true);
     }
     // DELETE générique
-    public function delete(string $endpoint): array
+    public function delete(string $endpoint): array|int|string
     {
         if (!$this->token) $this->login();
         $response = $this->client->delete($endpoint, [

@@ -104,7 +104,7 @@ class ThirdParties
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function getAll(array $params = []): array
+    public function getAll(array $params = []): array|int|string
     {
         return $this->client->get('thirdparties', $params);
     }
@@ -114,7 +114,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getById(int $id): array
+    public function getById(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}");
     }
@@ -191,16 +191,12 @@ class ThirdParties
      *
      * @param array $data Tableau associatif représentant les informations du tiers à créer.
      *
-     * @return array Retourne la réponse de l'API Dolibarr décodée en tableau associatif.
-     *               En cas de succès, contient généralement :
-     *               - `id` : identifiant du tiers créé
-     *               - `ref` : référence interne Dolibarr
-     *               - `name` : nom du tiers
-     *               - `client`, `prospect`, `fournisseur`
+     * @return int Retourne l'identifiant unique (ID) du tiers nouvellement créé.
+     *              
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function create(array $data): array
+    public function create(array $data): array|int|string
     {
         return $this->client->post('thirdparties', $data);
     }
@@ -277,19 +273,20 @@ class ThirdParties
     *
     * @throws \Exception si le token Dolibarr est manquant, si l’ID n’existe pas ou si la requête HTTP échoue.
     */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): array|int|string
     {
-        return $this->client->post("thirdparties/{$id}", $data);
+        return $this->client->put("thirdparties/{$id}", $data);
     }
 
     /**
      * Supprimer un tiers par ID
      * @param int $id
      * @return array
+     * [{success=>[code=>200,message=>"Object deleted"]}]
      */
-    public function delete(int $id): array
+    public function delete(int $id): array|int|string
     {
-        return $this->client->post("thirdparties/{$id}/delete");
+        return $this->client->delete("thirdparties/{$id}");
     }
 
     /**
@@ -297,7 +294,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function deleteAccounts(int $id): array
+    public function deleteAccounts(int $id): array|int|string
     {
         return $this->client->delete("thirdparties/{$id}/accounts");
     }
@@ -308,7 +305,7 @@ class ThirdParties
      * @param string|null $site Filtrer par site spécifique (optionnel)
      * @return array
      */
-    public function getAccounts(int $id,string|null $site=null): array
+    public function getAccounts(int $id,string|null $site=null): array|int|string
     {
         if ($site !== null) {
             return $this->client->get("thirdparties/{$id}/accounts", ['site' => $site]);
@@ -324,7 +321,7 @@ class ThirdParties
      * Example body payload : {"key_account": "cus_DAVkLSs1LYyYI", "site": "stripe"}
      * @return array
      */
-    public function createAccount(int $id, array $data): array
+    public function createAccount(int $id, array $data): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/accounts", $data);
     }
@@ -347,7 +344,7 @@ class ThirdParties
      * Example body payload : {"key_account": "cus_DAVkLSs1LYyYI"}
      * @return array
      */
-    public function attachSiteByAccount(int $id, string $site, array $data): array
+    public function attachSiteByAccount(int $id, string $site, array $data): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/accounts/{$site}", $data);
     }
@@ -359,7 +356,7 @@ class ThirdParties
      * Example body payload : {"key_account": "cus_DAVkLSs1LYyYI"}
      * @return array
      */
-    public function updateSiteByAccount(int $id, string $site, array $data): array
+    public function updateSiteByAccount(int $id, string $site, array $data): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/accounts/{$site}", $data);
     }
@@ -369,7 +366,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getBankAccounts(int $id): array
+    public function getBankAccounts(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/bankaccounts");
     }
@@ -380,7 +377,7 @@ class ThirdParties
      * Example body payload : {"bank_name": "Bank of Test", "iban": "FR7612345678901234567890123", "bic": "TESTFRPP"}
      * @return array
      */
-    public function createBankAccount(int $id, array $data): array
+    public function createBankAccount(int $id, array $data): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/bankaccounts", $data);
     }
@@ -389,7 +386,7 @@ class ThirdParties
      * @param int $id
      * @param int $bankAccountId
      * @return array
-     */    public function deleteBankAccount(int $id, int $bankAccountId): array
+     */    public function deleteBankAccount(int $id, int $bankAccountId): array|int|string
     {
         return $this->client->delete("thirdparties/{$id}/bankaccounts/{$bankAccountId}");
     }
@@ -402,7 +399,7 @@ class ThirdParties
      * Example body payload : {"bank_name": "Bank of Test Updated", "iban": "FR7612345678901234567890123", "bic": "TESTFRPP"}
      * @return array
      */
-    public function updateBankAccount(int $id, int $bankAccountId, array $data): array
+    public function updateBankAccount(int $id, int $bankAccountId, array $data): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/bankaccounts/{$bankAccountId}", $data);
     }
@@ -412,17 +409,17 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getCustomerCategories(int $id): array
+    public function getCustomerCategories(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/categories");
     }
 
-    public function removeCustomerCategory(int $id, int $categoryId): array
+    public function removeCustomerCategory(int $id, int $categoryId): array|int|string
     {
         return $this->client->delete("thirdparties/{$id}/categories/{$categoryId}");
     }
 
-    public function addCustomerCategory(int $id, int $categoryId): array
+    public function addCustomerCategory(int $id, int $categoryId): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/categories/{$categoryId}");
     }
@@ -435,7 +432,7 @@ class ThirdParties
      * Filter exceptional discount. "none" will return every discount, "available" returns unapplied discounts, "used" returns applied discounts
      * @return array
      */
-    public function fixedAmountsDiscounts(int $id, array $data): array
+    public function fixedAmountsDiscounts(int $id, array $data): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/fixedamountsdiscounts", $data);
     }
@@ -446,7 +443,7 @@ class ThirdParties
      * @param string $model ex:sepamandate model de document à générer
      * @return array
      */
-    public function generateBankAccountDocument(int $id, int $companybankid,string $model): array
+    public function generateBankAccountDocument(int $id, int $companybankid,string $model): array|int|string
     {
         return $this->client->post("/thirdparties/{$id}/generateBankAccountDocument/{$companybankid}/{$model}");
     }
@@ -456,7 +453,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getInvoicesQualifiedForCreditNotes(int $id): array
+    public function getInvoicesQualifiedForCreditNotes(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/invoicesqualifiedforcreditnotes");
     }
@@ -466,7 +463,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getInvoicesQualifiedForReplacement(int $id): array
+    public function getInvoicesQualifiedForReplacement(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/invoicesqualifiedforreplacement");
     }
@@ -476,7 +473,7 @@ class ThirdParties
      * @param int $targetId supprimer le tiers $targetId et fusionner dans le tiers $id
      * @return array
      */
-    public function Merge(int $id, int $targetId): array
+    public function Merge(int $id, int $targetId): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/merge/{$targetId}");
     }
@@ -485,7 +482,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getNotifications(int $id): array
+    public function getNotifications(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/notifications");
     }
@@ -496,7 +493,7 @@ class ThirdParties
      * @param int $notificationId
      * @return array
      */
-    public function deleteNotification(int $id, int $notificationId): array
+    public function deleteNotification(int $id, int $notificationId): array|int|string
     {
         return $this->client->delete("thirdparties/{$id}/notifications/{$notificationId}");
     }
@@ -508,7 +505,7 @@ class ThirdParties
      * Example body payload : {"type": "email", "message": "Votre message ici", "date_notification": 1762355641}
      * @return array
      */
-    public function createNotification(int $id, array $data): array
+    public function createNotification(int $id, array $data): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/notifications", $data);
     }
@@ -520,7 +517,7 @@ class ThirdParties
      * Example body payload : {"type": "email", "message": "Votre message mis à jour", "date_notification": 1762355641}
      * @return array
      */
-    public function updateNotification(int $id, int $notificationId, array $data): array
+    public function updateNotification(int $id, int $notificationId, array $data): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/notifications/{$notificationId}", $data);
     }
@@ -532,7 +529,7 @@ class ThirdParties
      * Example body payload : {"date_notification": 1762355641}
      * @return array
      */
-    public function createNotificationsByCode(int $id, string $code,array $data): array
+    public function createNotificationsByCode(int $id, string $code,array $data): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/notifications/code/{$code}",$data);
     }
@@ -542,7 +539,7 @@ class ThirdParties
      * @param string $mode "customer" ou "supplier"
      * @return array
      */
-    public function outstandingInvoices(int $id,string $mode="customer"): array
+    public function outstandingInvoices(int $id,string $mode="customer"): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/outstandinginvoices", ['mode' => $mode]);
     }
@@ -553,7 +550,7 @@ class ThirdParties
      * @param string $mode "customer" ou "supplier"
      * @return array
      */
-    public function outstandingOrders(int $id,string $mode="customer"): array
+    public function outstandingOrders(int $id,string $mode="customer"): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/outstandingorders", ['mode' => $mode]);
     }
@@ -564,7 +561,7 @@ class ThirdParties
      * @param string $mode "customer" ou "supplier"
      * @return array
      */
-    public function outstandingProposals(int $id,string $mode="customer"): array
+    public function outstandingProposals(int $id,string $mode="customer"): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/outstandingproposals", ['mode' => $mode]);
     }
@@ -575,7 +572,7 @@ class ThirdParties
      * @param int $representativeId
      * @return array
      */
-    public function deleteRepresentative(int $id, int $representativeId): array
+    public function deleteRepresentative(int $id, int $representativeId): array|int|string
     {
         return $this->client->delete("thirdparties/{$id}/representatives/{$representativeId}");
     }
@@ -587,7 +584,7 @@ class ThirdParties
      * @return array
      * @method Post
      */
-    public function addRepresentative(int $id, int $representativeId): array
+    public function addRepresentative(int $id, int $representativeId): array|int|string
     {
         return $this->client->post("thirdparties/{$id}/representatives/{$representativeId}");
     }
@@ -597,7 +594,7 @@ class ThirdParties
      * @param int $id
      * @return array
      */
-    public function getRepresentatives(int $id): array
+    public function getRepresentatives(int $id): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/representatives");
     }
@@ -608,7 +605,7 @@ class ThirdParties
      * @param int $priceLevelId
      * @return array
      */
-    public function setPriceLevel(int $id, int $priceLevelId): array
+    public function setPriceLevel(int $id, int $priceLevelId): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/pricelevel/{$priceLevelId}");
     }
@@ -619,7 +616,7 @@ class ThirdParties
      * @param array $data [sortfield=>'s.rowid', sortorder=>'ASC',limit=>'', page=>'']
      * @return array
      */
-    public function getSupplierCategories(int $id,array $data=['sortfield'=>'s.rowid', 'sortorder'=>'ASC','limit'=>'', 'page'=>'']): array
+    public function getSupplierCategories(int $id,array $data=['sortfield'=>'s.rowid', 'sortorder'=>'ASC','limit'=>'', 'page'=>'']): array|int|string
     {
         return $this->client->get("thirdparties/{$id}/supplier_categories",$data);
     }
@@ -630,7 +627,7 @@ class ThirdParties
      * @param int $categoryId
      * @return array
      */
-    public function removeSupplierCategory(int $id, int $categoryId): array
+    public function removeSupplierCategory(int $id, int $categoryId): array|int|string
     {
         return $this->client->delete("thirdparties/{$id}/supplier_categories/{$categoryId}");
     }
@@ -640,7 +637,7 @@ class ThirdParties
      * @param int $categoryId
      * @return array
      */
-    public function addSupplierCategory(int $id, int $categoryId): array
+    public function addSupplierCategory(int $id, int $categoryId): array|int|string
     {
         return $this->client->put("thirdparties/{$id}/supplier_categories/{$categoryId}");
     }
@@ -651,7 +648,7 @@ class ThirdParties
      * @param string $key_account
      * @return array
      */
-    public function getByAccount(string $site, string $key_account): array
+    public function getByAccount(string $site, string $key_account): array|int|string
     {
         return $this->client->get("thirdparties/accounts/{$site}/{$key_account}");
     }
@@ -661,7 +658,7 @@ class ThirdParties
      * @param string $barcode
      * @return array
      */
-    public function getByBarcode(string $barcode): array
+    public function getByBarcode(string $barcode): array|int|string
     {
         return $this->client->get("thirdparties/barcode/{$barcode}");
     }
@@ -671,7 +668,7 @@ class ThirdParties
      * @param string $email
      * @return array
      */
-    public function getByEmail(string $email): array
+    public function getByEmail(string $email): array|int|string
     {
         return $this->client->get("thirdparties/email/{$email}");
     }

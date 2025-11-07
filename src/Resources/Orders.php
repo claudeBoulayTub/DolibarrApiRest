@@ -29,7 +29,7 @@ class Orders
      *   }
      * }
      */
-    public function getAll(array $params = []): array
+    public function getAll(array $params = []): array|int|string
     {
         return $this->client->get('orders', $params);
     }
@@ -41,7 +41,7 @@ class Orders
      * @return object
      * 
      */
-    public function getById(int $id,int $contact_list=0): array
+    public function getById(int $id,int $contact_list=0): array|int|string
     {
         return $this->client->get("orders/{$id}",["contact_list"=>$contact_list]);
     }
@@ -115,14 +115,11 @@ class Orders
     *                      - socid (int) : ID du client
     *                      - lines (array) : tableau de lignes de commande
     *
-    * @return array Retourne la réponse de l'API Dolibarr décodée en tableau associatif.
-    *               En cas d'erreur, Dolibarr renvoie une structure contenant :
-    *               - code : code HTTP de l'erreur
-    *               - message : description de l'erreur
+    * @return int Retourne l'identifiant unique (ID) de la nouvelle commande créée.
     *
     * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
     */
-    public function create(array $data): array
+    public function create(array $data): array|int|string
     {
         return $this->client->post('orders', $data);
     }
@@ -183,7 +180,7 @@ class Orders
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
     */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): array|int|string
     {
         return $this->client->post("orders/{$id}", $data);
     }
@@ -193,7 +190,7 @@ class Orders
      * @param int $id
      * @return array
      */
-    public function delete(int $id): array
+    public function delete(int $id): array|int|string
     {
         return $this->client->delete("orders/{$id}");
     }
@@ -204,7 +201,7 @@ class Orders
      * @param bool $disableTriggers Désactive les déclencheurs si vrai
      * @return array
      */
-    public function close(int $id,bool $disableTriggers=false): array
+    public function close(int $id,bool $disableTriggers=false): array|int|string
     {
         $body = $disableTriggers ? ['notrigger' => 1] : [];
         return $this->client->post("orders/{$id}/close", $body);
@@ -216,7 +213,7 @@ class Orders
      * @param string $type CUSTOMER, SHIPPING, BILLING
      * @return array
      */
-    public function deleteContact(int $id,int $id_contact,string $type): array
+    public function deleteContact(int $id,int $id_contact,string $type): array|int|string
     {
         if(!in_array($type, ['CUSTOMER','SHIPPING','BILLING'])) {
             throw new \InvalidArgumentException("Type must be 'CUSTOMER', 'SHIPPING' or 'BILLING'");
@@ -231,7 +228,7 @@ class Orders
      * @param string $type CUSTOMER, SHIPPING, BILLING
      * @return array
      */
-    public function addContact(int $id,int $id_contact,string $type): array
+    public function addContact(int $id,int $id_contact,string $type): array|int|string
     {
         if(!in_array($type, ['CUSTOMER','SHIPPING','BILLING'])) {
             throw new \InvalidArgumentException("Type must be 'CUSTOMER', 'SHIPPING' or 'BILLING'");
@@ -244,7 +241,7 @@ class Orders
      * @param int $id
      * @return array
      */
-    public function getContactsOfOrders(int $id): array
+    public function getContactsOfOrders(int $id): array|int|string
     {
         return $this->client->get("orders/{$id}/contacts");
     }
@@ -254,7 +251,7 @@ class Orders
      * @param int $id
      * @return array
      */
-    public function getLinesOfOrder(int $id): array
+    public function getLinesOfOrder(int $id): array|int|string
     {
         return $this->client->get("orders/{$id}/lines");
     }
@@ -265,7 +262,7 @@ class Orders
      * @param array $data
      * @return array
      */
-    public function addLineToOrder(int $id, array $data): array
+    public function addLineToOrder(int $id, array $data): array|int|string
     {
         return $this->client->post("orders/{$id}/lines", $data);
     }
@@ -277,7 +274,7 @@ class Orders
      * @param array $data
      * @return array
      */
-    public function updateLineOfOrder(int $id, int $lineid, array $data): array
+    public function updateLineOfOrder(int $id, int $lineid, array $data): array|int|string
     {
         return $this->client->put("orders/{$id}/lines/{$lineid}", $data);
     }
@@ -288,7 +285,7 @@ class Orders
      * @param int $lineid
      * @return array
      */
-    public function deleteLineOfOrder(int $id, int $lineid): array
+    public function deleteLineOfOrder(int $id, int $lineid): array|int|string
     {
         return $this->client->delete("orders/{$id}/lines/{$lineid}/delete");
     }
@@ -298,7 +295,7 @@ class Orders
      * @param int $lineid
      * @return array
      */
-    public function getPropertiesOfLineOfOrder(int $id, int $lineid): array
+    public function getPropertiesOfLineOfOrder(int $id, int $lineid): array|int|string
     {
         return $this->client->get("orders/{$id}/lines/{$lineid}");
     }
@@ -308,7 +305,7 @@ class Orders
      * @param int $id
      * @return array
      */
-    public function reopen(int $id): array
+    public function reopen(int $id): array|int|string
     {
         return $this->client->post("orders/{$id}/reopen");
     }
@@ -318,7 +315,7 @@ class Orders
      * @param int $id
      * @return array
      */
-    public function SetBilled(int $id): array
+    public function SetBilled(int $id): array|int|string
     {
         return $this->client->post("orders/{$id}/setinvoiced");
     }
@@ -330,7 +327,7 @@ class Orders
      * Warehouse ID to use for stock change (Used only if option STOCK_CALCULATE_ON_VALIDATE_ORDER is on)
      * @return array
      */
-    public function setToDraft(int $id,int|null $idwarehouse=null): array
+    public function setToDraft(int $id,int|null $idwarehouse=null): array|int|string
     {
         if($idwarehouse!==null) {
             return $this->client->post("orders/{$id}/settodraft", ['idwarehouse' => $idwarehouse]);
@@ -343,7 +340,7 @@ class Orders
      * @param int $id
      * @return array
      */
-    public function getShipmentsOfOrder(int $id): array
+    public function getShipmentsOfOrder(int $id): array|int|string
     {
         return $this->client->get("orders/{$id}/shipments");
     }
@@ -352,9 +349,9 @@ class Orders
      * Créer une expédition/livraison pour une commande par ID
      * @param int $id
      * @param int $idwarehouse
-     * @return array
+     * @return int Retourne l'identifiant unique (ID) de la nouvelle expédition créée.
      */
-    public function createShipmentForOrder(int $id, int $idwarehouse): array
+    public function createShipmentForOrder(int $id, int $idwarehouse): array|int|string
     {
         return $this->client->post("orders/{$id}/shipments/{$idwarehouse}");
     }
@@ -368,7 +365,7 @@ class Orders
      * Disable triggers if set to 1
      * @return array
      */
-    public function validateOrder(int $id,int|null $idwarehouse=null,int|null $notrigger=null): array
+    public function validateOrder(int $id,int|null $idwarehouse=null,int|null $notrigger=null): array|int|string
     {
         $body=[];
         if($idwarehouse!=null){
@@ -383,9 +380,9 @@ class Orders
     /**
      * Créer une commande à partir d'une proposition par ID
      * @param int $id_proposal
-     * @return array
+     * @return int Retourne l'identifiant unique (ID) de la nouvelle commande créée.
      */
-    public function createFromProposal(int $id_proposal): array
+    public function createFromProposal(int $id_proposal): array|int|string
     {
         return $this->client->post("orders/createfromproposal/{$id_proposal}");
     }
@@ -398,7 +395,7 @@ class Orders
      * @return array
      * 
      */
-    public function getOrdersByRefExt(string $ref_ext,int $contact_list=0): array
+    public function getOrdersByRefExt(string $ref_ext,int $contact_list=0): array|int|string
     {
         return $this->client->get("orders/ref/{$ref_ext}",["contact_list"=>$contact_list]);
     }
@@ -411,7 +408,7 @@ class Orders
      * @return array
      * 
      */
-    public function getOrdersByRef(string $ref,int $contact_list=0): array
+    public function getOrdersByRef(string $ref,int $contact_list=0): array|int|string
     {
         return $this->client->get("orders/ref/{$ref}",["contact_list"=>$contact_list]);
     }

@@ -57,7 +57,7 @@ class Contacts
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function getAll(array $params = []): array
+    public function getAll(array $params = []): array|int|string
     {
         return $this->client->get('contacts', $params);
     }
@@ -67,7 +67,7 @@ class Contacts
      * @param int $id
      * @return array
      */
-    public function getById(int $id): array
+    public function getById(int $id): array|int|string
     {
         return $this->client->get("contacts/{$id}");
     }
@@ -129,12 +129,7 @@ class Contacts
      *                      - lastname (string) : nom du contact
      *                      - socid (int) : ID du tiers lié
      *
-     * @return array Retourne la réponse de l'API Dolibarr décodée en tableau associatif.
-     *               En cas de succès, la réponse contient généralement :
-     *               - `id` : identifiant du contact créé
-     *               - `ref` : référence interne Dolibarr
-     *               - `socid` : ID du tiers
-     *               - autres champs du contact
+     * @return int Retourne l'identifiant unique (ID) du nouveau contact créé.
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
@@ -203,7 +198,7 @@ class Contacts
      *
      * @throws \Exception si le token Dolibarr est manquant, si l’ID n’existe pas ou si la requête HTTP échoue.
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): array|int|string
     {
         return $this->client->put("contacts/{$id}", $data);
     }
@@ -213,7 +208,7 @@ class Contacts
      * @param int $id
      * @return array
      */
-    public function delete(int $id): array
+    public function delete(int $id): array|int|string
     {
         return $this->client->delete("contacts/{$id}/delete");
     }
@@ -223,7 +218,7 @@ class Contacts
      * @param int $id
      * @return array
      */
-    public function getCategoriesOfContact(int $id): array
+    public function getCategoriesOfContact(int $id): array|int|string
     {
         return $this->client->get("contacts/{$id}/categories");
     }
@@ -234,7 +229,7 @@ class Contacts
      * @param int $categoryId
      * @return array
      */
-    public function assignCategoryToContact(int $id, int $categoryId): array
+    public function assignCategoryToContact(int $id, int $categoryId): array|int|string
     {
         return $this->client->put("contacts/{$id}/categories/{$categoryId}");
     }
@@ -244,7 +239,7 @@ class Contacts
      * @param int $categoryId
      * @return array
      */
-    public function removeCategoryFromContact(int $id, int $categoryId): array
+    public function removeCategoryFromContact(int $id, int $categoryId): array|int|string
     {
         return $this->client->delete("contacts/{$id}/categories/{$categoryId}");
     }
@@ -252,9 +247,9 @@ class Contacts
      * Créer un utilisateur à partir d'un contact existant
      * @param int $id
      * @param array $data données de l'utilisateur selon l’API Dolibarr
-     * @return array
+     * @return int Retourne l'identifiant unique (ID) de l'utilisateur nouvellement créé.
      */
-    public function createUserFromContact(int $id, array $data): array
+    public function createUserFromContact(int $id, array $data): array|int|string
     {
         return $this->client->post("contacts/{$id}/createuser", $data);
     }
@@ -266,7 +261,7 @@ class Contacts
      * @param int $includeRoles optionnel
      * @return array
      */
-    public function getContactByEmail(string $email, int $includecount=0,int $includeRoles=0): array
+    public function getContactByEmail(string $email, int $includecount=0,int $includeRoles=0): array|int|string
     {
         
         return $this->client->get("contacts/email/{$email}&includecount={$includecount}&includeroles={$includeRoles}");

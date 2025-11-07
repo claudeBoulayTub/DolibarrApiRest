@@ -257,7 +257,7 @@ class Products
         bool $includesubproducts = false,
         bool $includeparentid = false,
         bool $includetrans = false
-    ): array {
+    ): array|int|string {
         $params = [
             'includestockdata' => $includestockdata,
             'includesubproducts' => $includesubproducts,
@@ -312,22 +312,9 @@ class Products
      *                    - **tobuy** *(string, optionnel)* : Indique si le produit est à acheter.  
      *                    - **tosell** *(string, optionnel)* : Indique si le produit est à vendre.  
      *
-     * @return array Retourne l’objet produit créé, exemple :
+     * @return int Retourne l’identifiant unique (ID) du produit nouvellement créé.:
      * ```json
-     * {
-     *   "id": "1",
-     *   "ref": "P3-100001",
-     *   "label": "Casque EVOLite® ventilé avec porte-badge - blanc",
-     *   "description": "Le EVOLite® est un produit révolutionnaire...",
-     *   "price": "48.79000000",
-     *   "price_ttc": "58.55000000",
-     *   "tva_tx": "20.0000",
-     *   "stockable_product": "1",
-     *   "status_buy": "1",
-     *   "desiredstock": "10",
-     *   "url": "https://cdn1.tubconcept.fr/p3/images/60847983.jpg",
-     *   "date_creation": 1762501419
-     * }
+     *  2
      * ```
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue.
@@ -396,7 +383,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): array|int|string
     {
         return $this->client->put("products/{$id}", $data);
     }
@@ -406,7 +393,7 @@ class Products
      * @param int $id
      * @return array
      */
-    public function delete(int $id): array
+    public function delete(int $id): array|int|string
     {
         return $this->client->delete("products/{$id}/delete");
     }
@@ -432,7 +419,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getCategories(int $id,string $sortfield='t.rowid',string $sortorder='ASC',int $limit=100,int $page=0): array
+    public function getCategories(int $id,string $sortfield='t.rowid',string $sortorder='ASC',int $limit=100,int $page=0): array|int|string
     {
         $params = [
             'sortfield' => $sortfield,
@@ -462,7 +449,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getPurchasePrices(int $id,string|null $ref=null,string|null $ref_ext=null,string|null $barcode=null): array
+    public function getPurchasePrices(int $id,string|null $ref=null,string|null $ref_ext=null,string|null $barcode=null): array|int|string
     {
         $body=[];
         if($ref !== null){
@@ -533,7 +520,7 @@ class Products
      *
      * @throws \Exception Si l'appel à l'API échoue ou si l'ID du produit est invalide.
      */
-    public function addPurchasePrice(int $id, array $data): array
+    public function addPurchasePrice(int $id, array $data): array|int|string
     {
         return $this->client->post("products/{$id}/purchase_prices", $data);
     }
@@ -562,7 +549,7 @@ class Products
      * 
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si les IDs sont invalides.
      */
-    public function deletePurchasePrice(int $id_product,int $id_price): array
+    public function deletePurchasePrice(int $id_product,int $id_price): array|int|string
     {
         return $this->client->delete("products/{$id_product}/purchase_prices/{$id_price}");
     }
@@ -584,7 +571,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getPricesPerCustomer(int $id_product): array
+    public function getPricesPerCustomer(int $id_product): array|int|string
     {
         return $this->client->get("products/{$id_product}/selling_multiprices/per_customer");
     }
@@ -606,7 +593,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getPricesPerQuantity(int $id_product): array
+    public function getPricesPerQuantity(int $id_product): array|int|string
     {
         return $this->client->get("products/{$id_product}/selling_multiprices/per_quantity");
     }
@@ -628,7 +615,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getPricesPerSegment(int $id_product): array
+    public function getPricesPerSegment(int $id_product): array|int|string
     {
         return $this->client->get("products/{$id_product}/selling_multiprices/per_segment");
     }
@@ -650,7 +637,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getStockData(int $id_product): array
+    public function getStockData(int $id_product): array|int|string
     {
         return $this->client->get("products/{$id_product}/stock");
     }
@@ -672,7 +659,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getSubProducts(int $id_product): array
+    public function getSubProducts(int $id_product): array|int|string
     {
         return $this->client->get("products/{$id_product}/subproducts");
     }
@@ -710,7 +697,7 @@ class Products
      *
      * @throws \Exception Si l'appel à l'API échoue ou si l'ID du produit est invalide.
      */
-    public function addSubProduct(int $id_product, array $data): array
+    public function addSubProduct(int $id_product, array $data): array|int|string
     {
         return $this->client->post("products/{$id_product}/subproducts", $data);
     }
@@ -739,7 +726,7 @@ class Products
      * 
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si les IDs sont invalides.
      */
-    public function deleteSubProduct(int $id_product,int $id_subproduct): array
+    public function deleteSubProduct(int $id_product,int $id_subproduct): array|int|string
     {
         return $this->client->delete("products/{$id_product}/subproducts/remove/{$id_subproduct}");
     }
@@ -762,7 +749,7 @@ class Products
      *
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function getVariants(int $id_product,int $include_stock=0): array
+    public function getVariants(int $id_product,int $include_stock=0): array|int|string
     {
         return $this->client->get("products/{$id_product}/variants", ['includestock' => $include_stock]);
     }
@@ -811,7 +798,7 @@ class Products
      *   ]
      * 
      */
-    public  function addVariant(int $id_product, array $data): array
+    public  function addVariant(int $id_product, array $data): array|int|string
     {
         return $this->client->post("products/{$id_product}/variants", $data);
     }
@@ -872,7 +859,7 @@ class Products
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’
      * ID est invalide.
      */
-    public function getAttributes(int $id_product,string $sortfield="t.ref",string $sortorder="ASC",int $limit=100,int|null $page=null,string $sqlfilters='',string $properties=''): array
+    public function getAttributes(int $id_product,string $sortfield="t.ref",string $sortorder="ASC",int $limit=100,int|null $page=null,string $sqlfilters='',string $properties=''): array|int|string
     {
         $params = [
             'sortfield' => $sortfield,
@@ -913,7 +900,7 @@ class Products
      * 
      * @throws \Exception Si l’appel à l’API Dolibarr échoue ou si l’ID est invalide.
      */
-    public function deleteAttribute(int $id_attribute): array
+    public function deleteAttribute(int $id_attribute): array|int|string
     {
         return $this->client->delete("products/attributes/{$id_attribute}");
     }

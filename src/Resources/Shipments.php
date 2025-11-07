@@ -71,7 +71,7 @@ class Shipments
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function getAll(array $params = []): array
+    public function getAll(array $params = []): array|int|string
     {
         return $this->client->get('shipments', $params);
     }
@@ -81,7 +81,7 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function getById(int $id): array
+    public function getById(int $id): array|int|string
     {
         return $this->client->get("shipments/{$id}");
     }
@@ -119,12 +119,11 @@ class Shipments
      *                      - tracking_number (string, optionnel) : numéro de suivi
      *                      - tracking_url (string, optionnel) : URL du suivi
      *
-     * @return array Retourne la réponse de l'API Dolibarr décodée en tableau associatif.
-     *               Contient l'expédition créée avec toutes ses lignes et informations associées.
+     * @return int Retourne l'identifiant unique (ID) de la nouvelle expédition créée.
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function create(array $data): array
+    public function create(array $data): array|int|string
     {
         return $this->client->post('shipments', $data);
     }
@@ -164,7 +163,7 @@ class Shipments
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): array|int|string
     {
         return $this->client->post("shipments/{$id}", $data);
     }
@@ -174,7 +173,7 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function delete(int $id): array
+    public function delete(int $id): array|int|string
     {
         return $this->client->post("shipments/{$id}/delete");
     }
@@ -184,7 +183,7 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function closeShipment(int $id): array
+    public function closeShipment(int $id): array|int|string
     {
         return $this->client->post("shipments/{$id}/close");
     }
@@ -195,7 +194,7 @@ class Shipments
      * @param int $lineId ID de la ligne à supprimer
      * @return array
      */
-    public function deleteLine(int $id, int $lineId): array
+    public function deleteLine(int $id, int $lineId): array|int|string
     {
         return $this->client->delete("shipments/{$id}/lines/{$lineId}/delete");
     }
@@ -205,7 +204,7 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function validateShipment(int $id): array
+    public function validateShipment(int $id): array|int|string
     {
         return $this->client->post("shipments/{$id}/validate");
     }

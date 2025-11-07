@@ -74,7 +74,7 @@ class Tickets
      *
      * @throws \Exception Si la requête échoue ou que l’authentification est invalide.
      */
-    public function getAll(array $params = []): array
+    public function getAll(array $params = []): array|int|string
     {
         return $this->client->get('tickets', $params);
     }
@@ -84,7 +84,7 @@ class Tickets
      * @param int $id
      * @return array
      */
-    public function getById(int $id): array
+    public function getById(int $id): array|int|string
     {
         return $this->client->get("tickets/{$id}");
     }
@@ -127,34 +127,12 @@ class Tickets
      *                    - **note_private** *(string, optionnel)* : Note interne visible uniquement par les utilisateurs.  
      *                    - **note_public** *(string, optionnel)* : Note publique visible par le client.  
      *
-     * @return array Retourne un tableau contenant les informations du ticket créé, par exemple :
+     * @return int Retourne l'identifiant unique (ID) du ticket créé, par exemple : `1`.
      *
-     * ```json
-     * {
-     *   "id": "1",
-     *   "ref": "TS2511-0001",
-     *   "fk_soc": "1",
-     *   "subject": "Bug dev",
-     *   "message": "Petit bug Api cotés tickets a implémenter sous peu merci !",
-     *   "status": "2",
-     *   "type_code": "ISSUE",
-     *   "category_code": "OTHER",
-     *   "severity_code": "LOW",
-     *   "type_label": "Issue or bug",
-     *   "category_label": "Other",
-     *   "severity_label": "Low",
-     *   "fk_user_assign": "1",
-     *   "fk_user_assign_string": "SuperAdmin",
-     *   "date_creation": 1762500257,
-     *   "date_modification": 1762500257,
-     *   "progress": "0",
-     *   "resolution": null
-     * }
-     * ```
      *
      * @throws \Exception Si la création du ticket échoue ou si les données sont invalides.
      */
-    public function create(array $data): array
+    public function create(array $data): array|int|string
     {
         return $this->client->post('tickets', $data);
     }
@@ -217,7 +195,7 @@ class Tickets
      *
      * @throws \Exception Si la mise à jour du ticket échoue ou si l’identifiant est invalide.
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): array|int|string
     {
         return $this->client->post("tickets/{$id}", $data);
     }
@@ -227,7 +205,7 @@ class Tickets
      * @param int $id
      * @return array
      */
-    public function delete(int $id): array
+    public function delete(int $id): array|int|string
     {
         return $this->client->post("tickets/{$id}/delete");
     }
@@ -238,7 +216,7 @@ class Tickets
      * @param array $data
      * @return array
      */
-    public function addNewMessage(int $id, array $data): array
+    public function addNewMessage(int $id, array $data): array|int|string
     {
         return $this->client->post("tickets/{$id}/messages", $data);
     }
@@ -248,7 +226,7 @@ class Tickets
      * @param string $ref
      * @return array
      */
-    public function getFromRef(string $ref): array
+    public function getFromRef(string $ref): array|int|string
     {
         return $this->client->get("tickets/ref/{$ref}");
     }
@@ -258,7 +236,7 @@ class Tickets
      * @param string $trackId
      * @return array
      */
-    public function getFromTrackId(string $trackId): array
+    public function getFromTrackId(string $trackId): array|int|string
     {
         return $this->client->get("tickets/track_id/{$trackId}");
     }
