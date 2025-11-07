@@ -56,7 +56,7 @@ class Line
     private $user_modification_id = null;
     private ?int $fk_user_creat = null;
     private ?int $fk_user_modif = null;
-    private int $specimen = 0;
+    private ?int $specimen = null;
     private $totalpaid = null;
     private array $extraparams = [];
     private $product = null;
@@ -94,7 +94,7 @@ class Line
     private $product_barcode = null;
     private $product_desc = null;
     private $fk_product_type = null;
-    private ?float $qty = null;
+    private ?int $qty = null;
     private $duree = null;
     private ?float $remise_percent = null;
     private ?string $info_bits = null;
@@ -152,6 +152,22 @@ class Line
         return get_object_vars($this);
     }
 
+    public function toArrayFiltered(): array
+    {
+        // ne garde que les propriétés non null
+        return array_filter(get_object_vars($this), fn($value) => $value !== null && $value !==[]);
+    }
+
+    public function filteredObject(): self
+    {
+        $filtered = new self();
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($value !== null) {
+                $filtered->$key = $value;
+            }
+        }
+        return $filtered;
+    }
     /**
      * Crée un objet OrderLine à partir d'une réponse API
      */
@@ -2559,4 +2575,5 @@ class Line
 
         return $this;
     }
+
 }

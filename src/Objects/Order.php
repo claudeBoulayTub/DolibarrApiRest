@@ -107,6 +107,11 @@ class Order
     /**
      * Convertit l'objet Order en tableau.
      */
+     public function toArrayFiltered(): array
+    {
+        // ne garde que les propriétés non null
+        return array_filter(get_object_vars($this), fn($value) => $value !== null && $value !==[]);
+    }
     public function toArray(): array
     {
         return get_object_vars($this);
@@ -1094,13 +1099,11 @@ class Order
     /**
      * Set the value of lines
      */
-    public function setLines(array|Line $lines): self
+    public function setLines(array $lines): self
     {
-        if($lines instanceof Line) {
-            $this->lines = $lines->toArray();
-        } else {
-            $this->lines = $lines;
-        }
+      
+        $this->lines = $lines;
+
 
         return $this;
     }
