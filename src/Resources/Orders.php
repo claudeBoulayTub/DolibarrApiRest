@@ -43,7 +43,7 @@ class Orders
      */
     public function getById(int $id,int $contact_list=0): array
     {
-        return $this->client->get("orders/{$id}&contact_list={$contact_list}");
+        return $this->client->get("orders/{$id}",["contact_list"=>$contact_list]);
     }
 
 
@@ -400,7 +400,7 @@ class Orders
      */
     public function getOrdersByRefExt(string $ref_ext,int $contact_list=0): array
     {
-        return $this->client->get("orders/ref/{$ref_ext}&contact_list={$contact_list}");
+        return $this->client->get("orders/ref/{$ref_ext}",["contact_list"=>$contact_list]);
     }
 
     /**
@@ -413,7 +413,7 @@ class Orders
      */
     public function getOrdersByRef(string $ref,int $contact_list=0): array
     {
-        return $this->client->get("orders/ref/{$ref}&contact_list={$contact_list}");
+        return $this->client->get("orders/ref/{$ref}",["contact_list"=>$contact_list]);
     }
 
 
