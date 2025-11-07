@@ -2,7 +2,7 @@
 namespace Tubconcept\DolibarrApiClient\Objects;
 use Tubconcept\DolibarrApiClient\Objects\Line;
 
-class OrderObject
+class Order
 {
     private ?string $module = null;
     private int $id;
