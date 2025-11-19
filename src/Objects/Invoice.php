@@ -55,11 +55,11 @@ class Invoice
     private $firstname = null;
     private $civility_id = null;
     private $civility_code = null;
-    private ?int $date_creation = null;
-    private ?int $date_validation = null;
-    private ?int $date_modification = null;
+    private ?string $date_creation = null;
+    private ?string $date_validation = null;
+    private ?string $date_modification = null;
     private $tms = null;
-    private $date_cloture = null;
+    private ?string $date_cloture = null;
     private $user_author = null;
     private $user_creation = null;
     private $user_creation_id = null;
@@ -85,8 +85,8 @@ class Invoice
     private $fk_soc = null;
     private ?int $socid = null;
     private $paye = null;
-    private ?int $date = null;
-    private $date_lim_reglement = null;
+    private ?string $date = null;
+    private ?string $date_lim_reglement = null;
     private $cond_reglement_code = null;
     private $cond_reglement_label = null;
     private $cond_reglement_doc = null;
@@ -115,7 +115,7 @@ class Invoice
     private $location_incoterms = null;
     private $fk_user_author = null;
     private $fk_user_valid = null;
-    private $datem = null;
+    private ?string $datem = null;
     private $delivery_date = null;
     private $ref_customer = null;
     private $resteapayer = null;
@@ -125,7 +125,7 @@ class Invoice
     private $fk_facture_source = null;
     private $line = null;
     private $fac_rec = null;
-    private $date_pointoftax = null;
+    private ?string $date_pointoftax = null;
     private $situation_counter = null;
     private $situation_final = null;
     private array $tab_previous_situation_invoice = [];
@@ -133,12 +133,17 @@ class Invoice
     private $retained_warranty = null;
     private $retained_warranty_date_limit = null;
     private $availability_id = null;
-    private $date_closing = null;
+    private ?string $date_closing = null;
     private $source = null;
     private $remise_percent = null;
     private ?string $online_payment_url = null;
 
    
+     public function toArrayFiltered(): array
+    {
+        // ne garde que les propriétés non null
+        return array_filter(get_object_vars($this), fn($value) => $value !== null && $value !==[]);
+    }
 
     public function toArray(): array
     {
@@ -256,7 +261,7 @@ class Invoice
     /**
      * Set the value of date_closing
      */
-    public function setDateClosing($date_closing): self
+    public function setDateClosing(string $date_closing): self
     {
         $this->date_closing = $date_closing;
 
@@ -544,7 +549,7 @@ class Invoice
     /**
      * Set the value of date_pointoftax
      */
-    public function setDatePointoftax($date_pointoftax): self
+    public function setDatePointoftax(string $date_pointoftax): self
     {
         $this->date_pointoftax = $date_pointoftax;
 
@@ -742,7 +747,7 @@ class Invoice
     /**
      * Set the value of datem
      */
-    public function setDatem($datem): self
+    public function setDatem(string $datem): self
     {
         $this->datem = $datem;
 
@@ -1029,6 +1034,7 @@ class Invoice
 
     /**
      * Set the value of mode_reglement_code
+     *
      */
     public function setModeReglementCode($mode_reglement_code): self
     {
@@ -1083,6 +1089,11 @@ class Invoice
 
     /**
      * Set the value of cond_reglement_code
+     * RECEP => Due upon receipt/30D =>Due in 30 days/30DENDMONTH => Due in 30 days, end of month/60D => Due in 60 days, end of month /
+     * 60DENDMONTH => Due in 60 days, end of month/PT_ORDER => Due on order/PT_DELIVERY => Due on delivery/PT_5050 => 50% on order, 50% on delivery/
+     * 10D => 10 days/10DENDMONTH => 10 days end of month/ 
+     * 14D => Due in 14 days/ 14DENDMONTH => Due in 14 days, end of month /DEP30PCTDEL => __DEPOSIT_PERCENT__% deposit
+     * Table=>llx_c_payment_term
      */
     public function setCondReglementCode($cond_reglement_code): self
     {
@@ -1102,7 +1113,7 @@ class Invoice
     /**
      * Set the value of date_lim_reglement
      */
-    public function setDateLimReglement($date_lim_reglement): self
+    public function setDateLimReglement(string $date_lim_reglement): self
     {
         $this->date_lim_reglement = $date_lim_reglement;
 
@@ -1112,7 +1123,7 @@ class Invoice
     /**
      * Get the value of date
      */
-    public function getDate(): ?int
+    public function getDate(): ?string
     {
         return $this->date;
     }
@@ -1120,7 +1131,7 @@ class Invoice
     /**
      * Set the value of date
      */
-    public function setDate(?int $date): self
+    public function setDate(?string $date): self
     {
         $this->date = $date;
 
@@ -1688,7 +1699,7 @@ class Invoice
     /**
      * Get the value of date_cloture
      */
-    public function getDateCloture()
+    public function getDateCloture(): ?string
     {
         return $this->date_cloture;
     }
@@ -1696,7 +1707,7 @@ class Invoice
     /**
      * Set the value of date_cloture
      */
-    public function setDateCloture($date_cloture): self
+    public function setDateCloture(string $date_cloture): self
     {
         $this->date_cloture = $date_cloture;
 
@@ -1760,7 +1771,7 @@ class Invoice
     /**
      * Get the value of date_modification
      */
-    public function getDateModification(): ?int
+    public function getDateModification(): ?string
     {
         return $this->date_modification;
     }
@@ -1768,7 +1779,7 @@ class Invoice
     /**
      * Set the value of date_modification
      */
-    public function setDateModification(?int $date_modification): self
+    public function setDateModification(?string $date_modification): self
     {
         $this->date_modification = $date_modification;
 
@@ -1778,7 +1789,7 @@ class Invoice
     /**
      * Get the value of date_validation
      */
-    public function getDateValidation(): ?int
+    public function getDateValidation(): ?string
     {
         return $this->date_validation;
     }
@@ -1786,7 +1797,7 @@ class Invoice
     /**
      * Set the value of date_validation
      */
-    public function setDateValidation(?int $date_validation): self
+    public function setDateValidation(?string $date_validation): self
     {
         $this->date_validation = $date_validation;
 
@@ -1796,7 +1807,7 @@ class Invoice
     /**
      * Get the value of date_creation
      */
-    public function getDateCreation(): ?int
+    public function getDateCreation(): ?string
     {
         return $this->date_creation;
     }
@@ -1804,7 +1815,7 @@ class Invoice
     /**
      * Set the value of date_creation
      */
-    public function setDateCreation(?int $date_creation): self
+    public function setDateCreation(?string $date_creation): self
     {
         $this->date_creation = $date_creation;
 
@@ -2163,6 +2174,10 @@ class Invoice
 
     /**
      * Set the value of cond_reglement_id
+     * Default Value=> 1:Due upon receipt/2:Due in 30 days/3:Due in 30 days, end of month/4:Due in 60 days, end of month /
+     * 5:Due in 60 days, end of month/6:Due on order/7:Due on delivery/8:50% on order, 50% on delivery/9:10 days/10:10 days end of month/ 
+     * 11: Due in 14 days/ 12: Due in 14 days, end of month /13:__DEPOSIT_PERCENT__% deposit
+     * Table=>llx_c_payment_term
      */
     public function setCondReglementId($cond_reglement_id): self
     {
@@ -2181,6 +2196,8 @@ class Invoice
 
     /**
      * Set the value of mode_reglement_id
+     * 1:TIP/2:Credit Transfer/3:Direct Debit/4:Cash/6:bank Card/7:Cheque/50:Online payment/51:Traite/52:LCR/53:Factor/100:Klarna/101:Sofort/102:Bancontact/103:iDeal/104:Giropay
+     * 105:PayPal (Table llx_c_paiement)
      */
     public function setModeReglementId(?int $mode_reglement_id): self
     {

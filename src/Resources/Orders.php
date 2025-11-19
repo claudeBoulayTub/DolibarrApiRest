@@ -182,7 +182,7 @@ class Orders
     */
     public function update(int $id, array $data): array|int|string
     {
-        return $this->client->post("orders/{$id}", $data);
+        return $this->client->put("orders/{$id}", $data);
     }
 
     /**
@@ -198,12 +198,12 @@ class Orders
     /**
      * Clôturer une commande par ID
      * @param int $id
-     * @param bool $disableTriggers Désactive les déclencheurs si vrai
+     * @param int $disableTriggers Désactive les déclencheurs si 1
      * @return array
      */
-    public function close(int $id,bool $disableTriggers=false): array|int|string
+    public function close(int $id,int $disableTriggers=0): array|int|string
     {
-        $body = $disableTriggers ? ['notrigger' => 1] : [];
+        $body = ['notrigger' =>$disableTriggers] ? ['notrigger' => 1] : [];
         return $this->client->post("orders/{$id}/close", $body);
     }
     /**
@@ -226,20 +226,20 @@ class Orders
      * @param int $id
      * @param int $id_contact
      * @param string $type CUSTOMER, SHIPPING, BILLING
-     * @return array
+     * @return array success
      */
     public function addContact(int $id,int $id_contact,string $type): array|int|string
     {
         if(!in_array($type, ['CUSTOMER','SHIPPING','BILLING'])) {
             throw new \InvalidArgumentException("Type must be 'CUSTOMER', 'SHIPPING' or 'BILLING'");
         }
-        return $this->client->post("orders/{$id}/contact/{$id_contact}/{$type}/add");
+        return $this->client->post("orders/{$id}/contact/{$id_contact}/{$type}");
     }
     
     /**
      * Récupérer les contacts associés à une commande par ID
      * @param int $id
-     * @return array
+     * @return array array of contact
      */
     public function getContactsOfOrders(int $id): array|int|string
     {
@@ -249,7 +249,7 @@ class Orders
     /**
      * Récupérer les lignes d'une commande par ID
      * @param int $id
-     * @return array
+     * @return array array of Line
      */
     public function getLinesOfOrder(int $id): array|int|string
     {
@@ -260,7 +260,7 @@ class Orders
      * Ajouter une ligne à une commande par ID
      * @param int $id
      * @param array $data
-     * @return array
+     * @return int id Line
      */
     public function addLineToOrder(int $id, array $data): array|int|string
     {
@@ -272,7 +272,7 @@ class Orders
      * @param int $id
      * @param int $lineid
      * @param array $data
-     * @return array
+     * @return array|int order or 0
      */
     public function updateLineOfOrder(int $id, int $lineid, array $data): array|int|string
     {
@@ -283,11 +283,11 @@ class Orders
      * Supprimer une ligne d'une commande par ID
      * @param int $id
      * @param int $lineid
-     * @return array
+     * @return array order
      */
     public function deleteLineOfOrder(int $id, int $lineid): array|int|string
     {
-        return $this->client->delete("orders/{$id}/lines/{$lineid}/delete");
+        return $this->client->delete("orders/{$id}/lines/{$lineid}");
     }
     /**
      * Récupérer les propriétés d'une ligne d'une commande par ID
@@ -303,9 +303,9 @@ class Orders
     /**
      * Rouvrir une commande par ID
      * @param int $id
-     * @return array
+     * @return null
      */
-    public function reopen(int $id): array|int|string
+    public function reopen(int $id): array|int|string|null
     {
         return $this->client->post("orders/{$id}/reopen");
     }
@@ -329,6 +329,7 @@ class Orders
      */
     public function setToDraft(int $id,int|null $idwarehouse=null): array|int|string
     {
+        
         if($idwarehouse!==null) {
             return $this->client->post("orders/{$id}/settodraft", ['idwarehouse' => $idwarehouse]);
         }else{
@@ -342,7 +343,7 @@ class Orders
      */
     public function getShipmentsOfOrder(int $id): array|int|string
     {
-        return $this->client->get("orders/{$id}/shipments");
+        return $this->client->get("orders/{$id}/shipment");
     }
 
     /**
@@ -353,7 +354,7 @@ class Orders
      */
     public function createShipmentForOrder(int $id, int $idwarehouse): array|int|string
     {
-        return $this->client->post("orders/{$id}/shipments/{$idwarehouse}");
+        return $this->client->post("orders/{$id}/shipment/{$idwarehouse}");
     }
 
     /**
@@ -380,9 +381,9 @@ class Orders
     /**
      * Créer une commande à partir d'une proposition par ID
      * @param int $id_proposal
-     * @return int Retourne l'identifiant unique (ID) de la nouvelle commande créée.
+     * @return array Retourne la nouvelle commande créée.
      */
-    public function createFromProposal(int $id_proposal): array|int|string
+    public function createFromProposal(int $id_proposal): array
     {
         return $this->client->post("orders/createfromproposal/{$id_proposal}");
     }

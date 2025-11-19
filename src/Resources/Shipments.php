@@ -71,7 +71,7 @@ class Shipments
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function getAll(array $params = []): array|int|string
+    public function getAll(array $params = []): array
     {
         return $this->client->get('shipments', $params);
     }
@@ -81,7 +81,7 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function getById(int $id): array|int|string
+    public function getById(int $id): array
     {
         return $this->client->get("shipments/{$id}");
     }
@@ -123,7 +123,7 @@ class Shipments
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function create(array $data): array|int|string
+    public function create(array $data): int
     {
         return $this->client->post('shipments', $data);
     }
@@ -163,9 +163,9 @@ class Shipments
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function update(int $id, array $data): array|int|string
+    public function update(int $id, array $data): array
     {
-        return $this->client->post("shipments/{$id}", $data);
+        return $this->client->put("shipments/{$id}", $data);
     }
 
     /**
@@ -175,7 +175,7 @@ class Shipments
      */
     public function delete(int $id): array|int|string
     {
-        return $this->client->post("shipments/{$id}/delete");
+        return $this->client->delete("shipments/{$id}");
     }
 
     /**
@@ -183,9 +183,10 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function closeShipment(int $id): array|int|string
+    public function closeShipment(int $id,int $disableTrigger=0): array
     {
-        return $this->client->post("shipments/{$id}/close");
+        $body=["notrigger"=>$disableTrigger];
+        return $this->client->post("shipments/{$id}/close",$body);
     }
 
     /**
@@ -196,7 +197,7 @@ class Shipments
      */
     public function deleteLine(int $id, int $lineId): array|int|string
     {
-        return $this->client->delete("shipments/{$id}/lines/{$lineId}/delete");
+        return $this->client->delete("shipments/{$id}/lines/{$lineId}");
     }
 
     /**
@@ -204,8 +205,9 @@ class Shipments
      * @param int $id
      * @return array
      */
-    public function validateShipment(int $id): array|int|string
+    public function validateShipment(int $id,int $disableTrigger=0): array
     {
-        return $this->client->post("shipments/{$id}/validate");
+        $body=["notrigger"=>$disableTrigger];
+        return $this->client->post("shipments/{$id}/validate",$body);
     }
 }

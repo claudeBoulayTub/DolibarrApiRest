@@ -9,7 +9,7 @@ class Line
     private $entity = null;
     private ?string $import_key = null;
     private array $array_options = [];
-    private $array_languages = null;
+    private ?array $array_languages = [];
     private $contacts_ids = null;
     private $contacts_ids_internal = null;
     private $linkedObjectsIds = null;
@@ -40,11 +40,11 @@ class Line
     private ?float $total_ttc = null;
     private ?string $actiontypecode = null;
     private ?string $civility_code = null;
-    private $date_creation = null;
-    private $date_validation = null;
-    private $date_modification = null;
+    private ?string $date_creation = null;
+    private ?string $date_validation = null;
+    private ?string $date_modification = null;
     private $tms = null;
-    private $date_cloture = null;
+    private ?string $date_cloture = null;
     private $user_author = null;
     private $user_creation = null;
     private ?int $user_creation_id = null;
@@ -68,10 +68,10 @@ class Line
     private ?string $fk_parent_attribute = null;
     private ?int $rowid = null;
     private $fk_unit = null;
-    private $date_debut_prevue = null;
-    private $date_debut_reel = null;
-    private $date_fin_prevue = null;
-    private $date_fin_reel = null;
+    private ?string $date_debut_prevue = null;
+    private ?string $date_debut_reel = null;
+    private ?string $date_fin_prevue = null;
+    private ?string $date_fin_reel = null;
     private $weight = null;
     private $weight_units = null;
     private $length = null;
@@ -123,11 +123,11 @@ class Line
     private ?int $rang = null;
     private $fk_fournprice = null;
     private ?float $pa_ht = null;
-    private ?float $marge_tx = null;
-    private ?float $marque_tx = null;
+    private ?string $marge_tx = null;
+    private ?string $marque_tx = null;
     private $remise = null;
-    private $date_start = null;
-    private $date_end = null;
+    private ?string $date_start = null;
+    private ?string $date_end = null;
     private $packaging = null;
     private ?string $line_id = null;
     private ?string $fk_elementdet = null;
@@ -136,11 +136,11 @@ class Line
     private ?string $element_type = null;
     private ?string $fk_origin = null;
     private ?string $fk_expedition = null;
-    private ?float $qty_shipped = null;
+    private ?int $qty_shipped = null;
     private array $detail_batch = [];
     private $detail_children = null;
     private array $details_entrepot = [];
-    private ?float $qty_asked = null;
+    private ?int $qty_asked = null;
     private $stockable_product = null;
 
 
@@ -193,7 +193,7 @@ class Line
     public function getDescription(): ?string { return $this->description; }
     public function setDescription(?string $desc): self { $this->description = $desc; return $this; }
     public function getQty(): ?float { return $this->qty; }
-    public function setQty(?float $qty): self { $this->qty = $qty; return $this; }
+    public function setQty(?int $qty): self { $this->qty = $qty; return $this; }
     public function getPrice(): ?float { return $this->price; }
     public function setPrice(?float $price): self { $this->price = $price; return $this; }
     public function getSubprice(): ?float { return $this->subprice; }
@@ -283,7 +283,7 @@ class Line
     /**
      * Set the value of marque_tx
      */
-    public function setMarqueTx(?float $marque_tx): self
+    public function setMarqueTx(?string $marque_tx): self
     {
         $this->marque_tx = $marque_tx;
 
@@ -293,7 +293,7 @@ class Line
     /**
      * Get the value of marge_tx
      */
-    public function getMargeTx(): ?float
+    public function getMargeTx(): ?string
     {
         return $this->marge_tx;
     }
@@ -301,7 +301,7 @@ class Line
     /**
      * Set the value of marge_tx
      */
-    public function setMargeTx(?float $marge_tx): self
+    public function setMargeTx(?string $marge_tx): self
     {
         $this->marge_tx = $marge_tx;
 
@@ -1165,7 +1165,7 @@ class Line
     /**
      * Set the value of date_fin_reel
      */
-    public function setDateFinReel($date_fin_reel): self
+    public function setDateFinReel(string $date_fin_reel): self
     {
         $this->date_fin_reel = $date_fin_reel;
 
@@ -1183,7 +1183,7 @@ class Line
     /**
      * Set the value of date_fin_prevue
      */
-    public function setDateFinPrevue($date_fin_prevue): self
+    public function setDateFinPrevue(string $date_fin_prevue): self
     {
         $this->date_fin_prevue = $date_fin_prevue;
 
@@ -1201,7 +1201,7 @@ class Line
     /**
      * Set the value of date_debut_reel
      */
-    public function setDateDebutReel($date_debut_reel): self
+    public function setDateDebutReel(string $date_debut_reel): self
     {
         $this->date_debut_reel = $date_debut_reel;
 
@@ -1219,7 +1219,7 @@ class Line
     /**
      * Set the value of date_debut_prevue
      */
-    public function setDateDebutPrevue($date_debut_prevue): self
+    public function setDateDebutPrevue(string $date_debut_prevue): self
     {
         $this->date_debut_prevue = $date_debut_prevue;
 
@@ -1651,7 +1651,7 @@ class Line
     /**
      * Set the value of date_cloture
      */
-    public function setDateCloture($date_cloture): self
+    public function setDateCloture(string $date_cloture): self
     {
         $this->date_cloture = $date_cloture;
 
@@ -1687,7 +1687,7 @@ class Line
     /**
      * Set the value of date_modification
      */
-    public function setDateModification($date_modification): self
+    public function setDateModification(string $date_modification): self
     {
         $this->date_modification = $date_modification;
 
@@ -1705,7 +1705,7 @@ class Line
     /**
      * Set the value of date_validation
      */
-    public function setDateValidation($date_validation): self
+    public function setDateValidation(string $date_validation): self
     {
         $this->date_validation = $date_validation;
 
@@ -1723,7 +1723,7 @@ class Line
     /**
      * Set the value of date_creation
      */
-    public function setDateCreation($date_creation): self
+    public function setDateCreation(string $date_creation): self
     {
         $this->date_creation = $date_creation;
 

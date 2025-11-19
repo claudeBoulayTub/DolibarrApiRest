@@ -55,11 +55,11 @@ class Shipment
     private $firstname = null;
     private $civility_id = null;
     private $civility_code = null;
-    private ?int $date_creation = null;
-    private $date_validation = null;
-    private ?int $date_modification = null;
+    private ?string $date_creation = null;
+    private ?string $date_validation = null;
+    private ?string $date_modification = null;
     private $tms = null;
-    private $date_cloture = null;
+    private ?string $date_cloture = null;
     private $user_author = null;
     private $user_creation = null;
     private $user_creation_id = null;
@@ -104,10 +104,10 @@ class Shipment
     private $sizeS = null;
     private $sizeW = null;
     private $weight = null;
-    private ?int $date_delivery = null;
-    private ?int $date = null;
-    private ?int $date_expedition = null;
-    private ?int $date_shipping = null;
+    private ?string $date_delivery = null;
+    private ?string $date = null;
+    private ?string $date_expedition = null;
+    private ?string $date_shipping = null;
     private ?string $date_valid = null;
     private $meths = null;
     private $listmeths = null;
@@ -119,6 +119,14 @@ class Shipment
     private ?string $signed_status = null;
 
    
+     /**
+     * Convertit l'objet Shipment en tableau. en éliminant les valeurs inutile
+     */
+     public function toArrayFiltered(): array
+    {
+        // ne garde que les propriétés non null
+        return array_filter(get_object_vars($this), fn($value) => $value !== null && $value !==[]);
+    }
 
     public function toArray(): array
     {
@@ -136,20 +144,23 @@ class Shipment
     public static function fromApiResponse(array $data): self
     {
         $shipment = new self();
+        $lines = [];
         foreach ($data as $key => $value) {
             if (property_exists($shipment, $key)) {
                 if ($key === 'lines' && (is_array($value) || is_object($value))) {
-                    // Convertir les lignes en objets ShipmentLine
-                    $lines=Line::fromApiResponse($value);
-                    if($lines instanceof Line){
-                       $shipment->lines = $lines->toArray(); 
-                    }
-                    
-                } else {
-                    $shipment->$key = $value;
+                    if (!empty($data['lines']) && is_array($data['lines'])) {
+                        foreach ($data['lines'] as $lineData) {
+                            $line = Line::fromApiResponse($lineData);;
+                        
+                            $lines[] = $line->toArrayFiltered();
+                        }
+                    } 
+                }else {
+                        $shipment->$key = $value;
                 }
             }
         }
+        $shipment->setLines($lines);
         return $shipment;
     } 
     
@@ -166,13 +177,10 @@ class Shipment
     public function setTrackingNumber(?string $tracking_number): self { $this->tracking_number = $tracking_number; return $this; }
 
     public function getLines(): array { return $this->lines; }
-    public function setLines(array|Line $lines): self { 
-        if($lines instanceof Line) {
-            $this->lines = $lines->toArray();
-        } else {
-            $this->lines = $lines;
-        }
-         return $this;
+    public function setLines(array $lines): self { 
+      
+        $this->lines = $lines;
+        return $this;
     }
 
     /**
@@ -412,7 +420,7 @@ class Shipment
     /**
      * Get the value of date_shipping
      */
-    public function getDateShipping(): ?int
+    public function getDateShipping(): ?string
     {
         return $this->date_shipping;
     }
@@ -420,7 +428,7 @@ class Shipment
     /**
      * Set the value of date_shipping
      */
-    public function setDateShipping(?int $date_shipping): self
+    public function setDateShipping(?string $date_shipping): self
     {
         $this->date_shipping = $date_shipping;
 
@@ -430,7 +438,7 @@ class Shipment
     /**
      * Get the value of date_expedition
      */
-    public function getDateExpedition(): ?int
+    public function getDateExpedition(): ?string
     {
         return $this->date_expedition;
     }
@@ -438,7 +446,7 @@ class Shipment
     /**
      * Set the value of date_expedition
      */
-    public function setDateExpedition(?int $date_expedition): self
+    public function setDateExpedition(?string $date_expedition): self
     {
         $this->date_expedition = $date_expedition;
 
@@ -448,7 +456,7 @@ class Shipment
     /**
      * Get the value of date
      */
-    public function getDate(): ?int
+    public function getDate(): ?string
     {
         return $this->date;
     }
@@ -456,7 +464,7 @@ class Shipment
     /**
      * Set the value of date
      */
-    public function setDate(?int $date): self
+    public function setDate(?string $date): self
     {
         $this->date = $date;
 
@@ -466,7 +474,7 @@ class Shipment
     /**
      * Get the value of date_delivery
      */
-    public function getDateDelivery(): ?int
+    public function getDateDelivery(): ?string
     {
         return $this->date_delivery;
     }
@@ -474,7 +482,7 @@ class Shipment
     /**
      * Set the value of date_delivery
      */
-    public function setDateDelivery(?int $date_delivery): self
+    public function setDateDelivery(?string $date_delivery): self
     {
         $this->date_delivery = $date_delivery;
 
@@ -1186,7 +1194,7 @@ class Shipment
     /**
      * Get the value of date_cloture
      */
-    public function getDateCloture()
+    public function getDateCloture():?string
     {
         return $this->date_cloture;
     }
@@ -1194,7 +1202,7 @@ class Shipment
     /**
      * Set the value of date_cloture
      */
-    public function setDateCloture($date_cloture): self
+    public function setDateCloture(string $date_cloture): self
     {
         $this->date_cloture = $date_cloture;
 
@@ -1222,7 +1230,7 @@ class Shipment
     /**
      * Get the value of date_modification
      */
-    public function getDateModification(): ?int
+    public function getDateModification(): ?string
     {
         return $this->date_modification;
     }
@@ -1230,7 +1238,7 @@ class Shipment
     /**
      * Set the value of date_modification
      */
-    public function setDateModification(?int $date_modification): self
+    public function setDateModification(?string $date_modification): self
     {
         $this->date_modification = $date_modification;
 
@@ -1240,7 +1248,7 @@ class Shipment
     /**
      * Get the value of date_validation
      */
-    public function getDateValidation()
+    public function getDateValidation():string
     {
         return $this->date_validation;
     }
@@ -1248,7 +1256,7 @@ class Shipment
     /**
      * Set the value of date_validation
      */
-    public function setDateValidation($date_validation): self
+    public function setDateValidation(string $date_validation): self
     {
         $this->date_validation = $date_validation;
 
@@ -1258,7 +1266,7 @@ class Shipment
     /**
      * Get the value of date_creation
      */
-    public function getDateCreation(): ?int
+    public function getDateCreation(): ?string
     {
         return $this->date_creation;
     }
@@ -1266,7 +1274,7 @@ class Shipment
     /**
      * Set the value of date_creation
      */
-    public function setDateCreation(?int $date_creation): self
+    public function setDateCreation(?string $date_creation): self
     {
         $this->date_creation = $date_creation;
 

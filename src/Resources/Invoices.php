@@ -75,7 +75,7 @@ class Invoices
      * 0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id, -1: Do not return contacts/adddesses
      * @return array
      */
-    public function getById(int $id, int $contact_list): array|int|string
+    public function getById(int $id, int $contact_list=0): array|int|string
     {
         return $this->client->get("invoices/{$id}", ['contact_list' => $contact_list]);
     }

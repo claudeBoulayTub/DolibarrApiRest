@@ -77,9 +77,10 @@ class DolibarrApiClient
     }
 
     // POST générique
-    public function post(string $endpoint, array $data = []): array|int|string
+    public function post(string $endpoint, array $data = []): array|int|string|null
     {
         if (!$this->token) $this->login();
+        // return json_encode($data);
         $response = $this->client->post($endpoint, [
             'query' => ['DOLAPIKEY' => $this->token],
             'json' => $data

@@ -57,11 +57,11 @@ class Order
     private ?string $firstname = null;
     private ?int $civility_id = null;
     private ?string $civility_code = null;
-    private ?int $date_creation = null;
-    private ?int $date_validation = null;
-    private ?int $date_modification = null;
+    private ?string $date_creation = null;
+    private ?string $date_validation = null;
+    private ?string $date_modification = null;
     private ?int $tms = null;
-    private ?int $date_cloture = null;
+    private ?string $date_cloture = null;
     private ?int $user_author = null;
     private ?int $user_creation = null;
     private ?int $user_creation_id = null;
@@ -90,7 +90,7 @@ class Order
     private ?string $ref_customer = null;
     private ?int $contactid = null;
     private ?string $billed = null;
-    private ?int $date_lim_reglement = null;
+    private ?string $date_lim_reglement = null;
     private ?string $cond_reglement_code = null;
     private ?string $cond_reglement_doc = null;
     private ?string $mode_reglement_code = null;
@@ -139,7 +139,7 @@ class Order
             foreach ($data['lines'] as $lineData) {
                 $line = Line::fromApiResponse($lineData);;
                
-                $lines = $line->toArray();
+                $lines[] = $line->toArrayFiltered();
             }
         }
         $order->setLines($lines);
@@ -334,6 +334,7 @@ class Order
 
     /**
      * Get the value of mode_reglement_code
+     * 
      */
     public function getModeReglementCode(): ?string
     {
@@ -342,6 +343,7 @@ class Order
 
     /**
      * Set the value of mode_reglement_code
+     * 
      */
     public function setModeReglementCode(?string $mode_reglement_code): self
     {
@@ -352,6 +354,7 @@ class Order
 
     /**
      * Get the value of cond_reglement_doc
+     * 
      */
     public function getCondReglementDoc(): ?string
     {
@@ -378,6 +381,11 @@ class Order
 
     /**
      * Set the value of cond_reglement_code
+     * RECEP => Due upon receipt/30D =>Due in 30 days/30DENDMONTH => Due in 30 days, end of month/60D => Due in 60 days, end of month /
+     * 60DENDMONTH => Due in 60 days, end of month/PT_ORDER => Due on order/PT_DELIVERY => Due on delivery/PT_5050 => 50% on order, 50% on delivery/
+     * 10D => 10 days/10DENDMONTH => 10 days end of month/ 
+     * 14D => Due in 14 days/ 14DENDMONTH => Due in 14 days, end of month /DEP30PCTDEL => __DEPOSIT_PERCENT__% deposit
+     * Table=>llx_c_payment_term
      */
     public function setCondReglementCode(?string $cond_reglement_code): self
     {
@@ -389,7 +397,7 @@ class Order
     /**
      * Get the value of date_lim_reglement
      */
-    public function getDateLimReglement(): ?int
+    public function getDateLimReglement(): ?string
     {
         return $this->date_lim_reglement;
     }
@@ -397,7 +405,7 @@ class Order
     /**
      * Set the value of date_lim_reglement
      */
-    public function setDateLimReglement(?int $date_lim_reglement): self
+    public function setDateLimReglement(?string $date_lim_reglement): self
     {
         $this->date_lim_reglement = $date_lim_reglement;
 
@@ -893,7 +901,7 @@ class Order
     /**
      * Get the value of date_cloture
      */
-    public function getDateCloture(): ?int
+    public function getDateCloture(): ?string
     {
         return $this->date_cloture;
     }
@@ -901,7 +909,7 @@ class Order
     /**
      * Set the value of date_cloture
      */
-    public function setDateCloture(?int $date_cloture): self
+    public function setDateCloture(?string $date_cloture): self
     {
         $this->date_cloture = $date_cloture;
 
@@ -929,7 +937,7 @@ class Order
     /**
      * Get the value of date_modification
      */
-    public function getDateModification(): ?int
+    public function getDateModification(): ?string
     {
         return $this->date_modification;
     }
@@ -937,7 +945,7 @@ class Order
     /**
      * Set the value of date_modification
      */
-    public function setDateModification(?int $date_modification): self
+    public function setDateModification(?string $date_modification): self
     {
         $this->date_modification = $date_modification;
 
@@ -947,7 +955,7 @@ class Order
     /**
      * Get the value of date_validation
      */
-    public function getDateValidation(): ?int
+    public function getDateValidation(): ?string
     {
         return $this->date_validation;
     }
@@ -955,7 +963,7 @@ class Order
     /**
      * Set the value of date_validation
      */
-    public function setDateValidation(?int $date_validation): self
+    public function setDateValidation(?string $date_validation): self
     {
         $this->date_validation = $date_validation;
 
@@ -965,7 +973,7 @@ class Order
     /**
      * Get the value of date_creation
      */
-    public function getDateCreation(): ?int
+    public function getDateCreation(): ?string
     {
         return $this->date_creation;
     }
@@ -973,7 +981,7 @@ class Order
     /**
      * Set the value of date_creation
      */
-    public function setDateCreation(?int $date_creation): self
+    public function setDateCreation(?string $date_creation): self
     {
         $this->date_creation = $date_creation;
 
@@ -1496,6 +1504,10 @@ class Order
 
     /**
      * Set the value of cond_reglement_id
+     * Default Value=> 1:Due upon receipt/2:Due in 30 days/3:Due in 30 days, end of month/4:Due in 60 days, end of month /
+     * 5:Due in 60 days, end of month/6:Due on order/7:Due on delivery/8:50% on order, 50% on delivery/9:10 days/10:10 days end of month/ 
+     * 11: Due in 14 days/ 12: Due in 14 days, end of month /13:__DEPOSIT_PERCENT__% deposit
+     * Table=>llx_c_payment_term
      */
     public function setCondReglementId(?int $cond_reglement_id): self
     {
@@ -1506,6 +1518,8 @@ class Order
 
     /**
      * Get the value of mode_reglement_id
+     * 1:TIP/2:Credit Transfer/3:Direct Debit/4:Cash/6:bank Card/7:Cheque/50:Online payment/51:Traite/52:LCR/53:Factor/100:Klarna/101:Sofort/102:Bancontact/103:iDeal/104:Giropay
+     * 105:PayPal (table llx_c_paiement)
      */
     public function getModeReglementId(): ?int
     {
@@ -1668,6 +1682,9 @@ class Order
 
     /**
      * Get the value of origin_id
+     * Possible Value by default : 1:Web Site/2:Mailing campaign/3:Phone campaign/4:Fax campaign/5:Commercial contact/6:Shop contact/7:Emailing campaign
+     * 8:Word of mouth/9:Partner/10:Employe/11:Sponsorship/12:Incoming contact of a customer
+     * (Table llx_c_input_reason)
      */
     public function getOriginId(): ?int
     {
@@ -1676,6 +1693,8 @@ class Order
 
     /**
      * Set the value of origin_id
+     * Possible Value by default : 1:Web Site/2:Mailing campaign/3:Phone campaign/4:Fax campaign/5:Commercial contact/6:Shop contact/7:Emailing campaign
+     * 8:Word of mouth/9:Partner/10:Employe/11:Sponsorship/12:Incoming contact of a customer
      */
     public function setOriginId(?int $origin_id): self
     {
@@ -1694,6 +1713,8 @@ class Order
 
     /**
      * Set the value of origin_type
+     * Possible Value by default : Web Site:1/Mailing campaign:2/Phone campaign:3/Fax campaign:4/Commercial contact:5/Shop contact:6/Emailing campaign:7
+     * Word of mouth:8/Partner:9/Employe:10/Sponsorship:11/Incoming contact of a customer:12
      */
     public function setOriginType(?string $origin_type): self
     {
