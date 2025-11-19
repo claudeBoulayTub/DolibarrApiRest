@@ -269,6 +269,32 @@ class Products
     }
 
     /**
+     * Get a Dolibarr product by its reference using the REST API.
+     *
+     * This function calls:
+     *     GET /products/ref/{ref}
+     *
+     * @param string $ref           Product reference to search
+     * @param bool   $includeStock  Load stock information (optional)
+     * @param bool   $includeSub    Load subproducts information (optional)
+     * @param bool   $includeParent Load parent product ID (optional)
+     * @param bool   $includeTrans  Load translations for label/description (optional)
+     *
+     * @return array|null           Product data as associative array, or null if not found
+     *
+     * @throws Exception            If API returns an error or connection fails
+     */
+    function getProductByRef(
+        string $ref,
+        bool $includeStock = false,
+        bool $includeSub = false,
+        bool $includeParent = false,
+        bool $includeTrans = false
+    ): ?array {
+        $body=["includestockdata"=>$includeStock,"includesubproducts"=>$includeSub,"includeparentid"=>$includeParent,"includetrans"=>$includeTrans];
+        return $this->client->get("/products/ref/{$ref}",$body);
+    }
+    /**
      * Crée un nouveau produit dans Dolibarr via l’API REST.
      *
      * Cette méthode envoie les données du produit au endpoint `products` et retourne
