@@ -4,11 +4,11 @@ require __DIR__ . '/../vendor/autoload.php';
 use Tubconcept\DolibarrApiClient\DolibarrApiClient;
 use Tubconcept\DolibarrApiClient\Resources\Status;
 
-// Utiliser token permanent
+// Utiliser token permanent (remplacez par votre URL et token)
 $client = new DolibarrApiClient('http://192.168.1.32:8080/api/index.php', null, null, 'TON_TOKEN_PERMANENT');
 
 // Ou utiliser login/password pour token temporaire
-// $client = new DolibarrApiClient('http://192.168.1.32:8080/api/index.php', 'tubconcept', 'MotDePasseAPI');
+// $client = new DolibarrApiClient('http://192.168.1.32:8080/api/index.php', 'votre_login', 'votre_mot_de_passe');
 
     $request=new Status($client);
 
