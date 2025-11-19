@@ -1,6 +1,6 @@
 <?php
 
-namespace DolibarrApi\Objects;
+namespace Tubconcept\DolibarrApiClient\Objects;
 
 class Product
 {
