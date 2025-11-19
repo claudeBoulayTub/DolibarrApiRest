@@ -292,7 +292,7 @@ class Products
         bool $includeTrans = false
     ): ?array {
         $body=["includestockdata"=>$includeStock,"includesubproducts"=>$includeSub,"includeparentid"=>$includeParent,"includetrans"=>$includeTrans];
-        return $this->client->get("/products/ref/{$ref}",$body);
+        return $this->client->get("products/ref/{$ref}",$body);
     }
     /**
      * Crée un nouveau produit dans Dolibarr via l’API REST.
