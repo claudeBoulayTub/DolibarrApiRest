@@ -63,7 +63,7 @@ class Invoices
      *
      * @throws \Exception Si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function getAll(array $params = []): array|int|string
+    public function getAll(array $params = []): array
     {
         return $this->client->get('invoices', $params);
     }
@@ -75,7 +75,7 @@ class Invoices
      * 0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id, -1: Do not return contacts/adddesses
      * @return array
      */
-    public function getById(int $id, int $contact_list=0): array|int|string
+    public function getById(int $id, int $contact_list=0): array
     {
         return $this->client->get("invoices/{$id}", ['contact_list' => $contact_list]);
     }
@@ -136,7 +136,7 @@ class Invoices
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function create(array $data): array|int|string
+    public function create(array $data):int
     {
         return $this->client->post('invoices', $data);
     }
@@ -200,9 +200,9 @@ class Invoices
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function update(int $id, array $data): array|int|string
+    public function update(int $id, array $data): array
     {
-        return $this->client->post("invoices/{$id}", $data);
+        return $this->client->put("invoices/{$id}", $data);
     }
 
     /**
@@ -212,7 +212,7 @@ class Invoices
      */
     public function delete(int $id): array|int|string
     {
-        return $this->client->post("invoices/{$id}/delete");
+        return $this->client->delete("invoices/{$id}");
     }
 
     /**
@@ -244,12 +244,8 @@ class Invoices
      * @param int $id ID de la facture
      * @param array $data Tableau associatif contenant les contacts à ajouter
      *                    Exemple :
-     *                    [
-     *                      "contacts" => [
-     *                          ["contact_id" => 1, "type" => "BILLING"],
-     *                          ["contact_id" => 2, "type" => "SHIPPING"]
-     *                      ]
-     *                    ]
+     *                          ["fk_socpeople" => 1, "type_contact " => "BILLING","source"=>"internet","notrigger"=>"0"]
+     *                       OR ["fk_socpeople" => 1, "type_contact " => "SHIPPING","source"=>"internet","notrigger"=>"0"]
      * @return array
      */
     public function addContacts(int $id, array $data): array|int|string
@@ -292,7 +288,7 @@ class Invoices
      *                    ]
      * @return array
      */
-    public function addLine(int $id, array $data): array|int|string
+    public function addLine(int $id, array $data):int
     {
         return $this->client->post("invoices/{$id}/lines", $data);
     }
@@ -303,9 +299,9 @@ class Invoices
      * @param int $lineId
      * @return array
      */
-    public function deleteLine(int $id, int $lineId): array|int|string
+    public function deleteLine(int $id, int $lineId): array
     {
-        return $this->client->post("invoices/{$id}/lines/{$lineId}");
+        return $this->client->delete("invoices/{$id}/lines/{$lineId}");
     }
 
     /**
@@ -323,9 +319,9 @@ class Invoices
      *                    ]
      * @return array
      */
-    public function updateLine(int $id, int $lineId, array $data): array|int|string
+    public function updateLine(int $id, int $lineId, array $data): array
     {
-        return $this->client->post("invoices/{$id}/lines/{$lineId}", $data);
+        return $this->client->put("invoices/{$id}/lines/{$lineId}", $data);
     }
 
     /**
@@ -333,7 +329,7 @@ class Invoices
      * @param int $id
      * @return array
      */
-    public function markAsCreditAvailable(int $id): array|int|string
+    public function markAsCreditAvailable(int $id): array
     {
         return $this->client->post("invoices/{$id}/markAsCreditAvailable");
     }
@@ -343,7 +339,7 @@ class Invoices
      * @param int $id
      * @return array
      */
-    public function getPayments(int $id): array|int|string
+    public function getPayments(int $id): array
     {
         return $this->client->get("invoices/{$id}/payments");
     }
@@ -383,7 +379,7 @@ class Invoices
      *
      * @throws \Exception Si le token Dolibarr est manquant ou si la requête échoue.
      */
-    public function addPayments(int $id, array $data): array|int|string
+    public function addPayments(int $id, array $data): int
     {
         $response = $this->client->post("invoices/{$id}/payments", $data);
         return (int) $response;
@@ -394,9 +390,13 @@ class Invoices
      * @param int $id
      * @return array
      */
-    public function setToDraft(int $id): array|int|string
+    public function setToDraft(int $id,?int $idWarehouse=null): array
     {
-        return $this->client->post("invoices/{$id}/settodraft");
+        $body=[];
+        if($idWarehouse!=null){
+            $body["idwarehouse"]=$idWarehouse;
+        }
+        return $this->client->post("invoices/{$id}/settodraft",$body);
     }
 
     /**
@@ -406,7 +406,7 @@ class Invoices
      * @param string|null $close_note Note de clôture (optionnel) Comment defined if we classify to 'Paid' when payment is not complete (for escompte for example)
      * @return array
      */
-    public function setToPaid(int $id,string|null $close_code,string|null $close_note): array|int|string
+    public function setToPaid(int $id,string|null $close_code=null,string|null $close_note=null): array|int|string
     {
         $body=[];
         if($close_code)$body['close_code']=$close_code;
@@ -418,7 +418,7 @@ class Invoices
      * @param int $id OrderId
      * @return array
      */
-    public function setToUnpaid(int $id): array|int|string
+    public function setToUnpaid(int $id): array
     {
         return $this->client->post("invoices/{$id}/settounpaid");
     }
@@ -460,18 +460,18 @@ class Invoices
      * @param int $contractId
      * @return int Retourne l'ID de la facture créée
      */
-    public function createFromContract(int $contractId): array|int|string
+    public function createFromContract(int $contractId): array|int
     {
-        return $this->client->post("invoices/fromcontract/{$contractId}");
+        return $this->client->post("invoices/createfromcontract/{$contractId}");
     }
 
     /**
      * Créer une facture à partir d'une commande par ID de commande
      * @param int $orderId
      * @return int Retourne l'ID de la facture créée
-     */    public function createFromOrder(int $orderId): array|int|string
+     */    public function createFromOrder(int $orderId): array|int
     {
-        return $this->client->post("invoices/fromorder/{$orderId}");
+        return $this->client->post("invoices/createfromorder/{$orderId}");
     }
 
     /**
