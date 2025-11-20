@@ -3,7 +3,10 @@ namespace Tubconcept\DolibarrApiClient;
 
 use GuzzleHttp\Client;
 use Tubconcept\DolibarrApiClient\Resources\{
-    Orders, Invoices, Products, Shipments, Status, ThirdParties, Tickets, Contacts
+    Orders, Invoices, Products, Shipments, Status, ThirdParties, Tickets, Contacts,
+    Setups,
+    SupplierInvoices,
+    SupplierOrders
 };
 
 class DolibarrApiClient
@@ -21,6 +24,9 @@ class DolibarrApiClient
     public ThirdParties $thirdparties;
     public Tickets $tickets;
     public Contacts $contacts;
+    public SupplierInvoices $supplier_invoices;
+    public SupplierOrders $supplier_orders;
+    public Setups $setups;
 
     public function __construct(string $baseUri, ?string $login = null, ?string $password = null, ?string $token = null)
     {
@@ -41,6 +47,9 @@ class DolibarrApiClient
         $this->thirdparties = new ThirdParties($this);
         $this->tickets = new Tickets($this);
         $this->contacts = new Contacts($this);
+        $this->supplier_orders=new SupplierOrders($this);
+        $this->supplier_invoices=new SupplierInvoices($this);
+        $this->setups=new Setups($this);
     }
 
     public function login(?string $login = null, ?string $password = null): bool
