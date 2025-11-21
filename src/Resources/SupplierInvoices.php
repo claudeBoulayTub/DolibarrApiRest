@@ -113,10 +113,10 @@ class SupplierInvoices{
      * @param int $id
      * @param array $request_data object Lines turn to array with ToArrayFiltered()
      * 
-     * @return array
+     * @return int
      * 
      */
-    public function addLine(int $id,array $request_data):array|int{
+    public function addLine(int $id,array $request_data):int{
         return $this->client->post("supplierinvoices/{$id}/lines",$request_data);
     }
 
@@ -163,7 +163,7 @@ class SupplierInvoices{
      * [Description for addPayment]
      *
      * @param int $id
-     * @param string $datepaye
+     * @param int $datepaye
      * @param int $payment_mode_id payment mode ID (look it up via REST GET to /setup/dictionary/payment_types) 
      * @param string $closepaidinvoices "yes" or "no"
      * @param int $accountid  REST GET to /bankaccounts
@@ -176,8 +176,8 @@ class SupplierInvoices{
      * @return array|int
      * 
      */
-    public function addPayment(int $id ,string $datepaye,int $payment_mode_id,string $closepaidinvoices,int $accountid,
-    ?string $num_payment,?string $comment,?string $chqemetteur,?string $chqbank,?int $amount):array|int{
+    public function addPayment(int $id ,int $datepaye,int $payment_mode_id,string $closepaidinvoices,int $accountid,
+    ?string $num_payment=null,?string $comment=null,?string $chqemetteur=null,?string $chqbank=null,?int $amount=null):array|int{
         $body=["datepaye"=>$datepaye,"payment_mode_id"=>$payment_mode_id,"closepaidinvoices"=>$closepaidinvoices,
         "accountid"=>$accountid];
         if($num_payment!=null){$body["num_payment"]=$num_payment;}
