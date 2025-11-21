@@ -188,7 +188,7 @@ class SupplierOrders{
      * @example: { "closeopenorder": 1, "comment": "", "lines": [{ "id": 14, "fk_product": 112, "qty": 18, "warehouse": 1, "price": 114, "comment": "", "eatby": 0, "sellby": 0, "batch": 0, "notrigger": 0 }] }
      * 
      */
-    public function ReceiveOrders(int $id,int $closeopenorder=0,string $comment,array $lines):array|int{
+    public function ReceiveOrders(int $id,string $comment,array $lines,int $closeopenorder=0):array|int{
         $body=[];
         $body["closeopenorder"]=$closeopenorder;
         $body["comment"]=$comment;

@@ -538,7 +538,7 @@ class Setups{
      * 
      */
     public function getStates(string $sortfield="code_departement",string $sortorder="ASC",int $limit=100,
-    ?int $page=null,?int $countryId,?string $sqlfilters=null):array{
+    ?int $page=null,?int $countryId=null,?string $sqlfilters=null):array{
          $body=[$limit,$sortfield,$sortorder];
         if($page!=null){$body["page"]=$page;}
         if($countryId!=null){$body["countryId"]=$countryId;}
