@@ -66,10 +66,10 @@ class SupplierOrders{
      *
      * @param array $request_data
      * 
-     * @return array
+     * @return int
      * @example: {"ref": "auto", "ref_supplier": "1234", "socid": "1", "multicurrency_code": "SEK", "multicurrency_tx": 1, "tva_tx": 25, "note": "Imported via the REST API"}
      */
-    public function create(array $request_data):array{
+    public function create(array $request_data):int{
         return $this->client->post("supplierorders",$request_data);
     }
 
@@ -105,10 +105,10 @@ class SupplierOrders{
      * @param int|null $idwarehouse=null
      * @param int|null $secondlevel=null
      * 
-     * @return array|int|string
+     * @return array
      * 
      */
-    public function approve(int $id,?int $idwarehouse=null, ?int $secondlevel=null):array|int|string{
+    public function approve(int $id,?int $idwarehouse=null, ?int $secondlevel=null):array{
         $body=[];
         if($idwarehouse!=null){
             $body["idwarehouse"]=$idwarehouse;
@@ -128,11 +128,11 @@ class SupplierOrders{
      * @param int $contactId
      * @param string $type can be (BILLING, SHIPPING, CUSTOMER, SALESREPFOLL, ...)
      * @param string $source (external or internal)
-     * 
-     * @return int|array
+     *  when null return its doesn't have work
+     * @return int|array|null
      * 
      */
-    public function addContact(int $id,int $contactId,string $type,string $source):int|array{
+    public function addContact(int $id,int $contactId,string $type,string $source):int|array|null{
         return $this->client->post("supplierorders/{$id}/contact/{$contactId}/{$type}/{$source}");
     }
 
@@ -148,7 +148,7 @@ class SupplierOrders{
      */
     public function getContacts(int $id,string $source="all",?string $type=null):array{
         $body=[];
-        $body[]=$source;
+        $body["source"]=$source;
         if($type!=null){
             $body["type"]=$type;
         }
@@ -182,9 +182,9 @@ class SupplierOrders{
      * @param int $id
      * @param int $closeopenorder=0 Close Order if everything is reeived
      * @param string $comment
-     * @param array $lines Array of product as strings
+     * @param array $lines Array of product as Line
      * 
-     * @return array|int
+     * @return array
      * @example: { "closeopenorder": 1, "comment": "", "lines": [{ "id": 14, "fk_product": 112, "qty": 18, "warehouse": 1, "price": 114, "comment": "", "eatby": 0, "sellby": 0, "batch": 0, "notrigger": 0 }] }
      * 
      */
