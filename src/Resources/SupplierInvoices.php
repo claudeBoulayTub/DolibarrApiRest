@@ -74,7 +74,7 @@ class SupplierInvoices{
      *
      * @param array $request_data
      * 
-     * @return array
+     * @return int
      * 
      */
     public function create(array $request_data):int{
