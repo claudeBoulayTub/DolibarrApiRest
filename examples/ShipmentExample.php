@@ -16,7 +16,7 @@ $ship=new Shipments($test);
         $shipment->setEntrepotId(1);//id of wareHouse
         $shipment->setOriginId(81); // id of the order if you want to link the shipments to it
         $shipment->setOriginType("commande"); // type of the origin
-        $shipment->setSocid(6);//id of your company
+        $shipment->setSocid(6);//id of the thirdparty that will receives it
         $shipment->setTrackingNumber("XHOJLKMPKL");
         $shipment->setWeight(5.5);
         $line=new Line();
