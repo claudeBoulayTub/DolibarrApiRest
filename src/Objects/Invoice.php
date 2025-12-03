@@ -9,7 +9,7 @@ class Invoice
     private ?int $id = null;
     private $entity = null;
     private ?string $import_key = null;
-    private array $array_options = [];
+    private ?array $array_options = [];
     private $array_languages = null;
     private ?array $contacts_ids = [];
     private $contacts_ids_internal = null;
@@ -48,7 +48,7 @@ class Invoice
     private ?float $total_localtax1 = null;
     private ?float $total_localtax2 = null;
     private ?float $total_ttc = null;
-    private array $lines = [];
+    private ?array $lines = [];
     private ?string $actiontypecode = null;
     private $name = null;
     private $lastname = null;
@@ -71,9 +71,9 @@ class Invoice
     private $user_modification_id = null;
     private $fk_user_creat = null;
     private $fk_user_modif = null;
-    private int $specimen = 0;
+    private ?int $specimen = 0;
     private $totalpaid = null;
-    private array $extraparams = [];
+    private ?array $extraparams = [];
     private $product = null;
     private $cond_reglement_supplier_id = null;
     private $deposit_percent = null;
@@ -101,7 +101,7 @@ class Invoice
     private $sumcreditnote = null;
     private $sumcreditnote_multicurrency = null;
     private $remaintopay = null;
-    private array $creditnote_ids = [];
+    private ?array $creditnote_ids = [];
     private $stripechargedone = null;
     private $stripechargeerror = null;
     private ?string $description = null;
@@ -128,8 +128,8 @@ class Invoice
     private ?string $date_pointoftax = null;
     private $situation_counter = null;
     private $situation_final = null;
-    private array $tab_previous_situation_invoice = [];
-    private array $tab_next_situation_invoice = [];
+    private ?array $tab_previous_situation_invoice = [];
+    private ?array $tab_next_situation_invoice = [];
     private $retained_warranty = null;
     private $retained_warranty_date_limit = null;
     private $availability_id = null;
