@@ -11,7 +11,7 @@ class Invoice
     private ?string $import_key = null;
     private array $array_options = [];
     private $array_languages = null;
-    private array $contacts_ids = [];
+    private ?array $contacts_ids = [];
     private $contacts_ids_internal = null;
     private $linkedObjectsIds = null;
     private $fk_project = null;
