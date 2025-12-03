@@ -244,9 +244,8 @@ class Product
         $p = new self();
 
         foreach ($data as $key => $value) {
-            $property = self::snakeToCamel($key);
-            if (property_exists($p, $property)) {
-                $p->$property = $value;
+            if (property_exists($p, $key) && $key !== 'lines') {
+                $p->$key = $value;
             }
         }
 
