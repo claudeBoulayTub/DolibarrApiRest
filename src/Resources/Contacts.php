@@ -133,7 +133,7 @@ class Contacts
      *
      * @throws \Exception si le token Dolibarr est manquant ou si la requête HTTP échoue.
      */
-    public function create(array $data): array
+    public function create(array $data): int
     {
         return $this->client->post('contacts', $data);
     }
