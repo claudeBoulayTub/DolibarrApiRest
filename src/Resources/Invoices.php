@@ -468,8 +468,8 @@ class Invoices
     /**
      * Créer une facture à partir d'une commande par ID de commande
      * @param int $orderId
-     * @return int Retourne l'ID de la facture créée
-     */    public function createFromOrder(int $orderId): array|int
+     * @return array Retourne la facture créée
+     */    public function createFromOrder(int $orderId): array
     {
         return $this->client->post("invoices/createfromorder/{$orderId}");
     }
